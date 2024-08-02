@@ -36,7 +36,7 @@ if debug_mode pd=working_directory
 
 workdir=pd+'\'
 if !file_exists(workdir+'elpAudio.exe') workdir=directory_previous(pd)+'\'//registry_read_string_ext('elpAudio','work_dir')+'\'
-if !file_exists(workdir+'elpAudio.exe') workdir=registry_read_string_ext('elpAudio','work_dir')
+if !file_exists(workdir+'elpAudio.exe') workdir=registry_read_string_ext('elpAudio','work_dir')+'\'
 if !file_exists(workdir+'elpAudio.exe') {
 show_message("Can't find elpAudio executable. Are you opening this file in unzipped archive?")
 game_end()
@@ -55,6 +55,11 @@ draw_set_color(c_white)
 draw_rectangle(-1,-1,641,481,0)
 
 if mouse_x<120 select=clamp(floor(mouse_y/30),0,sett-1)
+
+if mouse_x<120 and mouse_y>room_height-60 {
+window_set_cursor(cr_handpoint)
+if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio-player','')
+} else window_set_cursor(cr_default)
 
 i=0
 repeat(sett)
