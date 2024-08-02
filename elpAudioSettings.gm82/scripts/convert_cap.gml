@@ -9,6 +9,4 @@ ag=string_replace_all(ag,'%pn','5')
 ag=string_replace_all(ag,'%ps','15')
 ag=string_replace_all(ag,'%sn','Auto Pilot - Seventeen')
 ag=string_replace_all(ag,'#','\n')
-//ag=string_replace_all(ag,'%v',get_version())
-//show_message(ag)
 return ag;
