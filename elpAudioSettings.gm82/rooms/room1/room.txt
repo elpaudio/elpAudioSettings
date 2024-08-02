@@ -1,4 +1,4 @@
-caption=
+caption=elpAudio settings
 width=480
 height=240
 snap_x=32
