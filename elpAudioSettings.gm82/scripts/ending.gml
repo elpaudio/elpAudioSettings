@@ -12,9 +12,7 @@ ini_write_real('Caption','changeCaption',caption_chng)
 ini_close()
 
 
-execute_program_async('taskkill elpaudio.exe')
-if execute_program_async_result() {
+execute_program_silent('taskkill elpaudio.exe')
 execute_program_silent('"'+workdir+'elpaudio.exe"')
 sleep(600)
 game_end()
-}

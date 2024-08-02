@@ -1,34 +1,3 @@
-/*myfile[0]=file_find_first(argument0+'themes\*.*',fa_sysfile+fa_directory+fa_volumeid)
-var i;i=1
-if myfile[0]!='' {
-repeat(1024) {
-myfile[i]=file_find_next()
-if myfile[i]='' or (filename_ext(myfile[i])!='' and myfile[i]!='..') {myfile[i]='' break}
-i+=1
-}
-}
-file_find_close()
-var ii,mystr;ii=0;mystr=''
-repeat(i) {
-myfile[ii]=myfile[ii+1]
-ii+=1
-}
-ii=0
-repeat(i) {
-myfile[ii]='themes\'+myfile[ii+1]+'\theme.ini'
-mystr+=string(myfile[ii])+"#"
-ii+=1
-}
-//show_message(mystr)
-i=0
-repeat(ii-2)
-{
-ini_open(myfile[i])
-theme[i]=ini_read_string('Default','themeName','default')
-ini_close()
-i+=1
-}*/
-
 var di;
 di=argument0+'settings.ini'
 curtheme='themes\default\theme.ini'
