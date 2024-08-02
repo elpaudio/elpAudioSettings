@@ -1,2 +1,5 @@
-# elpAudioSettings
- elpAudio Settings, now with real source code!
+# elpAudio Settings
+elpAudio settings source code. 
+
+## HOW TO COMPILE:
+	-use Game Maker 8.2
