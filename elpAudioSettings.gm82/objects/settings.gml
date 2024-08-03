@@ -90,16 +90,19 @@ if curwindow==0 {
 draw_text(160,10,"CHANGE THEME")
 draw_text_ext(140,30,'Current theme:#'+mytheme+"#"+curtheme,14,room_width-120)
 
-draw_set_color(c_ltgray)
-if mouse_x>130 and mouse_y>75 and mouse_x<300 and mouse_y<102 {
-draw_set_color(c_gray)
-if mouse_check_button(mb_left) draw_set_color(c_dkgray)
-if mouse_check_button_released(mb_left) {file=get_open_filename('Theme files|*.ini','theme.ini') if file='' n=1 else {ini_open(workdir+'settings.ini') ini_write_string('','themePath',file) load_settings(workdir) ini_close()}}
+if button_draw(130,75,128,24,-1,0,'Change theme...') {
+file=get_open_filename('Theme files|*.ini','theme.ini')
+if file='' n=1 else {
+ini_open(workdir+'settings.ini')
+ini_write_string('','themePath',file)
+load_settings(workdir)
+ini_close()
+}
 }
 
-draw_rectangle(130,75,300,102,0)
-draw_set_color(c_black)
-draw_text(140,80,'Change theme...')
+if button_draw(130,120,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
+old_themes=!old_themes
+
 }
 
 if curwindow==1 {
@@ -107,16 +110,10 @@ draw_text(160,10,'PLAYER SETTINGS')
 draw_text_ext(140,30,'You can change floating text speed and etc.',14,370)
 draw_text(140,50,'Current speed: '+string(textspd))
 
-draw_set_color(c_ltgray)
-if mouse_x>130 and mouse_y>75 and mouse_x<300 and mouse_y<102 {
-draw_set_color(c_gray)
-if mouse_check_button(mb_left) draw_set_color(c_dkgray)
-if mouse_check_button_released(mb_left) {spd=get_integer('Set text speed (more than 0)',25) if spd=0 n=1 else {ini_open(workdir+'settings.ini') ini_write_real('','textSpeed',spd) ini_close() load_settings(workdir)}}
+if button_draw(130,75,128,24,-1,0,'Change text speed') {
+textspd=get_integer('Set text speed (more than 0)',25)
+if textspd=0 textspd=25
 }
-
-draw_rectangle(130,75,300,102,0)
-draw_set_color(c_black)
-draw_text(140,80,'Change text speed')
 
 draw_set_color(c_ltgray)
 draw_rectangle(160,120,200,152,0)
@@ -208,21 +205,10 @@ caption_chn2
 
 if curwindow==4 {
 draw_text(160,10,"SAVE & EXIT")
-draw_text_ext(140,30,'The settings and elpAudio will close for applying the changes.#PLEASE SAVE YOUR PLAYLIST!',14,340)
+draw_text_ext(140,30,'The settings and elpAudio will close for applying the changes.',14,340)
 
-draw_set_color(c_ltgray)
-if mouse_x>130 and mouse_y>75 and mouse_x<300 and mouse_y<102 {
-draw_set_color(c_gray)
-if mouse_check_button(mb_left) draw_set_color(c_dkgray)
-if mouse_check_button_released(mb_left) {
-ending()
-}
-}
 
-draw_rectangle(130,75,300,102,0)
-draw_set_color(c_black)
-draw_text(140,80,'Save and Exit')
+if button_draw(130,75,128,24,-1,0,'Save and exit') ending()
 }
-
 
 draw_reset()
