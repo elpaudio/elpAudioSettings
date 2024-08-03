@@ -11,6 +11,9 @@ caption_chn1='(%t2 / %ta2) elpAudio %v [%pn/%ps]'
 caption_chn2='(%sn) elpAudio %v [%pn/%ps]'
 caption_chn_spd=3
 caption_chng=1
+
+old_themes=0
+
 if file_exists(di) {
 ini_open(di)
 curtheme=ini_read_string('','themePath','themes\default\theme.ini')
@@ -26,6 +29,8 @@ caption_chn_spd=ini_read_real('Caption','captionChangeSpeed',3)
 caption_chng=ini_read_real('Caption','changeCaption',1)
 
 __stick_to_edges=ini_read_real('','windowSticksToEdges',1)
+
+old_themes=ini_read_real('','EnableOldThemes',0)
 
 myfps=ini_read_real('','framerate',60)
 
