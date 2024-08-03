@@ -1,8 +1,8 @@
-name=Tahoma
-size=10
+name=MS Sans Serif
+size=11
 bold=0
 italic=0
 charset=1
-aa_level=3
+aa_level=0
 range_start=0
 range_end=255
