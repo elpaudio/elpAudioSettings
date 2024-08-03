@@ -1,3 +1,3 @@
 //Sorry, not automatic.
 //HAHA
-return '1.5'
+return '1.75'
