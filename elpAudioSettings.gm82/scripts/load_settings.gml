@@ -11,8 +11,11 @@ caption_chn1='(%t2 / %ta2) elpAudio %v [%pn/%ps]'
 caption_chn2='(%sn) elpAudio %v [%pn/%ps]'
 caption_chn_spd=3
 caption_chng=1
+myfps=60
+__stick_to_edges=1
 
 old_themes=0
+load_migrated=1
 
 if file_exists(di) {
 ini_open(di)
@@ -31,6 +34,7 @@ caption_chng=ini_read_real('Caption','changeCaption',1)
 __stick_to_edges=ini_read_real('','windowSticksToEdges',1)
 
 old_themes=ini_read_real('','EnableOldThemes',0)
+load_migrated=ini_read_real('','OpenMigratedListAfterConverting',1)
 
 myfps=ini_read_real('','framerate',60)
 
@@ -40,5 +44,9 @@ var mm;mm=argument0+string_copy(curtheme,string_pos('themes\',curtheme),300)
 if file_exists(mm) {
 ini_open(mm)
 mytheme=ini_read_string('Default','themeName','default')
+version=ini_read_real('Default','RequiredVersion',1.6)
 ini_close()
 }
+
+//for plugins
+get_plugins(argument0);

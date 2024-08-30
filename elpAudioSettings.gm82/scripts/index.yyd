@@ -6,3 +6,4 @@ button_draw
 get_enabled
 convert_cap
 elpaudio_get_version
+get_plugins
