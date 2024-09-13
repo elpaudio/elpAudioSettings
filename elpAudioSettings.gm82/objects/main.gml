@@ -53,7 +53,12 @@ action_id=603
 applies_to=self
 */
 draw_set_color(c_white)
-draw_rectangle(-1,-1,641,481,0)
+//draw_rectangle(-1,-1,641,481,0)
+draw_sprite_ext(bg,0,480,240,(480/640),(240/480),0,c_white,1)
+draw_set_blend_mode(bm_add)
+draw_rectangle_color(120,-1,240,241,c_white,c_black,c_black,c_white,0)
+draw_rectangle_color(120,-1,480,120,c_white,c_white,c_black,c_black,0)
+draw_set_blend_mode(bm_normal)
 
 if mouse_x<120 select=clamp(floor(mouse_y/30),0,sett-1)
 
@@ -64,6 +69,7 @@ if mouse_x<120 and mouse_y>room_height-60 {
     window_set_cursor(cr_default)
 
 i=0
+draw_rectangle(-1,-1,120,240,0)
 repeat(sett)
 {
     if select=i
