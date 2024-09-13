@@ -142,16 +142,18 @@ if curwindow==1 {
 
 if curwindow==2 {
     draw_text(160,10,'ADVANCED SETTINGS')
-    draw_text(160,40,'Enable fullscreen switch#by pressing F4: '+get_enabled(fswitch))
 
-    if button_draw(400,40,20,20,checkspr,fswitch)==1 then
+    if button_draw(160,40,270,24,-1,-1,'Enable fullscreen switch by pressing F4: '+get_enabled(fswitch)) then
         fswitch=!fswitch
 
-    if button_draw(160,100,120,20,-1,0,'CHANGE MAX FPS')==1 then
+    if button_draw(160,88,120,20,-1,0,'CHANGE MAX FPS') then
         myfps=min(max(get_integer('Set FPS for elpAudio. #(default is 60)',myfps),1),240) //fucking disguisting
 
+    if skipframes if button_draw(160,85,120,20,-1,0,'CHANGE SKIPPING FRAMES') then
+        millisecs=min(max(get_integer('Set frames for skipping (milliseconds)#Minimum is 1, maximum is 2000 (why so much?)',millisecs),1),2000)
+
     draw_set_color(c_black)
-    draw_text(160,80,"elpAudio's max FPS: "+string(myfps))
+    draw_text(160,68,"elpAudio's max FPS: "+string(myfps))
     draw_set_color(c_black)
     ms='Should elpAudio stick to#screen edges? (only one display): '+get_enabled(__stick_to_edges)
     draw_text(160,124,ms)
