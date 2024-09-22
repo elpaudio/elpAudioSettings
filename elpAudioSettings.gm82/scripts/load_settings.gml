@@ -15,6 +15,7 @@ myfps=60
 __stick_to_edges=1
 skipframes=0
 millisecs=1
+vsync=0
 
 old_themes=0
 load_migrated=1
@@ -41,7 +42,8 @@ load_migrated=ini_read_real('','OpenMigratedListAfterConverting',1)
 myfps=ini_read_real('','framerate',60)
 
 skipframes=ini_read_real('','SkipFrames',0)
-millisecs=ini_read_real('','FramesForSkipping',1)
+millisecs=ini_read_real('','FramesForSkip',1)
+vsync=ini_read_real('','VerticalSync',0)
 
 ini_close()
 }

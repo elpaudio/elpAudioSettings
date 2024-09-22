@@ -14,6 +14,7 @@ ini_open(workdir+'settings.ini')
     ini_write_real('','OpenMigratedListAfterConverting',load_migrated)
     ini_write_real('','SkipFrames',skipframes)
     ini_write_real('','FramesForSkip',millisecs)
+    ini_write_real('','VerticalSync',vsync)
 ini_close()
 
 ini_open(workdir+'plugins\active.ini')
