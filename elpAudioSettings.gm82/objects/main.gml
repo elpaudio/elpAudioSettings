@@ -60,11 +60,14 @@ draw_rectangle_color(120,-1,240,241,c_white,c_black,c_black,c_white,0)
 draw_rectangle_color(120,-1,480,120,c_white,c_white,c_black,c_black,0)
 draw_set_blend_mode(bm_normal)
 
-if mouse_x<120 select=clamp(floor(mouse_y/30),0,sett-1)
-
-if mouse_x<120 and mouse_y>room_height-60 {
-    window_set_cursor(cr_handpoint)
-    if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio-player','')
+if mouse_x<120 {
+    if mouse_y>room_height-60 {
+        window_set_cursor(cr_handpoint)
+        if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio-player','')
+    } else if mouse_y>0 {
+        window_set_cursor(cr_default)
+        select=clamp(floor(mouse_y/30),0,sett-1)
+    }
 } else
     window_set_cursor(cr_default)
 
@@ -74,7 +77,15 @@ repeat(sett)
 {
     if select=i
     {
-        if mouse_check_button(mb_left) and mouse_x<120 draw_set_color(c_dkgray) else {draw_set_color(c_gray) if mouse_check_button_released(mb_left) and mouse_x<120 {curwindow=select checkbox()}}
+        if mouse_check_button(mb_left) and mouse_x<120 then
+            draw_set_color(c_dkgray)
+        else {
+            draw_set_color(c_gray)
+            if mouse_check_button_released(mb_left) and mouse_x<120 {
+                curwindow=select
+                checkbox()
+            }
+        }
         draw_rectangle(-1,select*30,119,select*30+30,0)
         draw_rectangle_color(60,select*30,120,select*30+30,draw_get_color(),c_white,c_white,draw_get_color(),0)
 }
