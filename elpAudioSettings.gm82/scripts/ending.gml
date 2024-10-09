@@ -1,4 +1,5 @@
 ini_open(workdir+'settings.ini')
+    ini_write_string('','themePath',curtheme)
     ini_write_real('','visualiserBars',visfreq)
     ini_write_real('','enableSwitchFScreen',fswitch)
     ini_write_real('','windowSticksToEdges',__stick_to_edges)
