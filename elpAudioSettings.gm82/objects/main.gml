@@ -35,6 +35,21 @@ curwindow=0
 pd=program_directory
 if debug_mode pd=working_directory
 
+CAPTION_HELP='Caption string help:
+                %v - elpAudio version
+                %pn - playing now number
+                %ps - playlist size
+                %t1, %t2 - song playing time with/without hours
+                %ta1, %ta2 - song length with/without hours
+                %sn - "compiled" track name
+                %tra - track artist 
+                %trt - track title
+                %trf - track from... (album)
+                %trg - track genre
+                %try - track year
+                %trn - track number
+                \# - new line'
+
 workdir=pd+'\'
 if !file_exists(workdir+'elpAudio.exe') workdir=directory_previous(pd)+'\'
     if !file_exists(workdir+'elpAudio.exe') workdir=registry_read_string_ext('elpAudio','work_dir')+'\'
@@ -64,7 +79,7 @@ if mouse_x<120 {
     if mouse_y>room_height-60 {
         window_set_cursor(cr_handpoint)
         if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio-player','')
-    } else if mouse_y>0 {
+    } else if mouse_y>0 and mouse_x>0 {
         window_set_cursor(cr_default)
         select=clamp(floor(mouse_y/30),0,sett-1)
     }
@@ -77,11 +92,11 @@ repeat(sett)
 {
     if select=i
     {
-        if mouse_check_button(mb_left) and mouse_x<120 then
+        if mouse_check_button(mb_left) and mouse_x<120 and mouse_x>0 then
             draw_set_color(c_dkgray)
         else {
             draw_set_color(c_gray)
-            if mouse_check_button_released(mb_left) and mouse_x<120 {
+            if mouse_check_button_released(mb_left) and mouse_x<120 and mouse_x>0 {
                 curwindow=select
                 checkbox()
             }
@@ -105,23 +120,20 @@ draw_rectangle(-1,-1,120,select*30,1)
 draw_set_color(c_black)
 
 if curwindow==0 {
-    draw_text(160,10,"CHANGE THEME")
+    draw_text(160,10,"THEME OPTIONS")
     draw_text_ext(140,30,'Current theme:#'+mytheme+"#"+curtheme,14,room_width-120)
 
-    if button_draw(130,75,128,24,-1,0,'Change theme...') {
+    if button_draw(130,100,128,24,-1,0,'Change theme...') {
         file=get_open_filename('Theme files|*.ini','theme.ini')
-        if file='' n=1 else {
-            ini_open(workdir+'settings.ini')
-            ini_write_string('','themePath',file)
-            load_settings(workdir)
-            ini_close()
-        }
+
+        if file!='' then
+            curtheme=file
     }
 
-    if button_draw(130,120,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
+    if button_draw(130,148,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
         old_themes=!old_themes
 
-    if button_draw(130,150,270,24,-1,0,'Load migrated playlist after conversion: '+get_enabled(load_migrated))
+    if button_draw(130,176,270,24,-1,0,'Load migrated playlist after conversion: '+get_enabled(load_migrated))
         load_migrated=!load_migrated
 
 }
@@ -196,7 +208,7 @@ if curwindow==3 {
         draw_set_color(c_black)
         draw_text(160,60,'Your current IDLE caption is:#'+caption_idle+'#Converted: '+convert_cap(caption_idle))
 
-        if button_draw(160,125,200,24,-1,0,'CHANGE IDLE CAPTION') {
+        if button_draw(160,108,200,20,-1,0,'CHANGE IDLE CAPTION') {
             caption_idle=get_string(
             'Change idle string.##Additional things:#%v - elpAudio version',
             caption_idle
@@ -204,13 +216,9 @@ if curwindow==3 {
         }
         draw_set_color(c_black)
 
-        draw_text(160,152,'Your current PLAY caption is:#'+caption_play+'#Converted: '+convert_cap(caption_play))
-        if button_draw(160,212,200,24,-1,0,'CHANGE PLAY CAPTION') {
-            caption_play=get_string(
-            'Change PLAY string.##Additional things:#%v - elpAudio version#%pn - playing now number#%pa - playlist size#%t1, %t2 - song playing time with/without hours#%ta1, %ta2 - song length with/without hours#%sn - track name#\# - new line',
-            caption_play
-            )
-        }
+        draw_text(160,132,'Your current PLAY caption is:#'+caption_play+'#Converted: '+convert_cap(caption_play))
+        if button_draw(160,180,200,20,-1,0,'CHANGE PLAY CAPTION') then
+            caption_play=get_string(CAPTION_HELP,caption_play)
     }
     if level=1 {
         draw_set_color(c_black)
@@ -219,29 +227,21 @@ if curwindow==3 {
             caption_chng=!caption_chng
 
         if button_draw(160,70,256,16,-1,0,'Change caption change speed: (cur. '+string(caption_chn_spd)+'s)') then
-            caption_chn_spd=get_integer('Change caption change speed in seconds',caption_chn_spd)
+            caption_chn_spd=get_integer('Change caption change speed in seconds#(default is 3 seconds)',caption_chn_spd)
 
         draw_set_color(c_black)
         if caption_chng {
             draw_text(160,90,'Current CHNG1 caption is:#'+caption_chn1+'#Converted: '+convert_cap(caption_chn1))
-            if button_draw(160,160,200,20,-1,-1,'CHANGE CHNG1 CAPTION') {
-                caption_chn1=get_string(
-                'Change CHNG1 string.##Additional things:#%v - elpAudio version#%pn - playing now number#%pa - playlist size#%t1, %t2 - song playing time with/without hours#%ta1, %ta2 - song length with/without hours#%sn - track name#\# - new line',
-                caption_chn1
-                )
-            }
+            if button_draw(160,160,200,20,-1,-1,'CHANGE CHNG1 CAPTION') then
+                caption_chn1=get_string(CAPTION_HELP,caption_chn1)
         }
     }
     if level=2 {
         draw_set_color(c_black)
         if caption_chng {
             draw_text(160,60,'Current CHNG2 caption is:#'+caption_chn2+'#Converted: '+convert_cap(caption_chn2))
-            if button_draw(160,135,200,20,-1,-1,'CHANGE CHNG2 CAPTION') {
-                caption_chn2=get_string(
-                'Change CHNG1 string.##Additional things:#%v - elpAudio version#%pn - playing now number#%pa - playlist size#%t1, %t2 - song playing time with/without hours#%ta1, %ta2 - song length with/without hours#%sn - track name#\# - new line',
-                caption_chn2
-                )
-            }
+            if button_draw(160,135,200,20,-1,-1,'CHANGE CHNG2 CAPTION') then
+                caption_chn2=get_string(CAPTION_HELP,caption_chn2)
         } else draw_text(160,60,'Enable caption change at first!')
     }
 }
@@ -268,3 +268,11 @@ if curwindow==5 {
 }
 
 draw_reset()
+#define KeyPress_112
+/*"/*'/**//* YYD ACTION
+lib_id=1
+action_id=603
+applies_to=self
+*/
+show_message("elpAUDIO v"+elpaudio_get_version()+"##by elpoep 2018-2024#BSD-3 License")
+show_message("Thanks to:#♦corakit♦#♦catpawz♦#♦DoneD♦#♦Fukumeru♦#♦ruby53♦#♦Olav '8bitbubsy' Sörensen♦#♦WinAMP♦#♦AmigaAMP♦#♦renex and floogle♦#♦GM82 community♦#♦Every other elpAUDIO testers♦#♦Moving Shadow label♦#♦♦...and YOU!♦♦")
