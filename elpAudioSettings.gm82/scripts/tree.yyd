@@ -6,3 +6,8 @@
 |convert_cap
 |elpaudio_get_version
 |get_plugins
++WASABIXML
+	|ConvertWasabiToSkin
+	|fprintf
++WA2Skin
+	|WAConvert

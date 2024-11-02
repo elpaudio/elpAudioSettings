@@ -16,6 +16,8 @@ __stick_to_edges=1
 skipframes=0
 millisecs=1
 vsync=0
+__recursive=0
+__buffer_size=256
 
 old_themes=0
 load_migrated=1
@@ -44,6 +46,8 @@ myfps=ini_read_real('','framerate',60)
 skipframes=ini_read_real('','SkipFrames',0)
 millisecs=ini_read_real('','FramesForSkip',1)
 vsync=ini_read_real('','VerticalSync',0)
+__recursive=ini_read_real('','RecursiveFolders',0)
+__buffer_size=ini_read_real('','AudioBufferSize',256)
 
 ini_close()
 }

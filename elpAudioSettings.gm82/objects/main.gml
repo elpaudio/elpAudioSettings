@@ -61,6 +61,7 @@ if !file_exists(workdir+'elpAudio.exe') workdir=directory_previous(pd)+'\'
 
 
 load_settings(workdir)
+//ConvertWasabiToSkin('C:\Program Files (x86)\Winamp\Skins\Winamp Modern\skin.xml')
 #define Draw_0
 /*"/*'/**//* YYD ACTION
 lib_id=1
@@ -124,10 +125,12 @@ if curwindow==0 {
     draw_text_ext(140,30,'Current theme:#'+mytheme+"#"+curtheme,14,room_width-120)
 
     if button_draw(130,100,128,24,-1,0,'Change theme...') {
-        file=get_open_filename('Theme files|*.ini','theme.ini')
+        file=get_open_filename('Theme files|*.ini|Winamp2 skin file|*.wsz;*.zip','theme.ini')
 
-        if file!='' then
-            curtheme=file
+        if file!='' then {
+                if filename_ext(file)=='.ini' curtheme=file;
+                else {WAConvert(file) curtheme='themes\'+filename_remove_ext(filename_name(file))+'\theme.ini'}
+            }
     }
 
     if button_draw(130,148,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
@@ -157,10 +160,11 @@ if curwindow==1 {
     myw=200
     did=myw/visfreq
     hh=0
-    repeat(visfreq) {
+    if visfreq<512 repeat(visfreq) {
         draw_rectangle(myx+hh*did,130-abs(lengthdir_x(20,current_time*0.1+hh*4)),myx+hh*did+did,130,0)
         hh+=1
-    }
+    } else draw_text(myx,130,'Laggy 0_0')
+    if button_draw(130,155,128,38,-1,-1,'Change audio buf. size #(cur. is '+string(__buffer_size)+')') __buffer_size=clamp(get_integer('Type in new audio buffer size.#256 is default, you can change it up to 16383.#Note that it will lag!',__buffer_size),1,16383)
 }
 
 if curwindow==2 {
@@ -175,7 +179,7 @@ if curwindow==2 {
     if button_draw(160,112,180,20,-1,0,'Enable skip frames: '+get_enabled(skipframes)) then
         skipframes=!skipframes
 
-    if skipframes if button_draw(160,136,270,20,-1,0,'Change amount of frames for skip##The current amount of frames for skip are '+string(millisecs)) then
+    if skipframes if button_draw(160,136,270,20,-1,0,'Change amount of frames for skip (cur. is '+string(millisecs)+')') then
         millisecs=min(max(get_integer('Set frames for skip (milliseconds)#Minimum is 1, maximum is 2000 (why so much?)',millisecs),1),2000)
 
     draw_set_color(c_black)
@@ -186,6 +190,8 @@ if curwindow==2 {
         __stick_to_edges=!__stick_to_edges
 
     if button_draw(160,160,270,20,-1,-1,'Vertical sync is turned '+get_enabled(vsync,1)) vsync=!vsync
+
+    if button_draw(160,184,270,20,-1,-1,'Recursive folders in Add File button are '+get_enabled(__recursive,1)) __recursive=!__recursive
 
     draw_set_color(c_black)
 }

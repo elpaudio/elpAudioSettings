@@ -17,7 +17,7 @@ applies_to=self
 */
 image_index=2*button+1
 enter=1
-if rel>0 rel-=1 else {if tap=0 rel=30 else rel=2 tap=1 if button=0 {if main.visfreq<255 main.visfreq+=1} else {if main.visfreq>1 main.visfreq-=1}}
+if rel>0 rel-=1 else {if tap=0 rel=30 else rel=2 tap=1 if button=0 {if main.visfreq<2047 main.visfreq+=1} else {if main.visfreq>1 main.visfreq-=1}}
 #define Mouse_7
 /*"/*'/**//* YYD ACTION
 lib_id=1

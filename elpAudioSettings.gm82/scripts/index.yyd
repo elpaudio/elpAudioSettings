@@ -7,3 +7,6 @@ get_enabled
 convert_cap
 elpaudio_get_version
 get_plugins
+ConvertWasabiToSkin
+fprintf
+WAConvert
