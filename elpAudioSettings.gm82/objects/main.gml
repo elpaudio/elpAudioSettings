@@ -61,7 +61,6 @@ if !file_exists(workdir+'elpAudio.exe') workdir=directory_previous(pd)+'\'
 
 
 load_settings(workdir)
-//ConvertWasabiToSkin('C:\Program Files (x86)\Winamp\Skins\Winamp Modern\skin.xml')
 #define Draw_0
 /*"/*'/**//* YYD ACTION
 lib_id=1
@@ -79,7 +78,7 @@ draw_set_blend_mode(bm_normal)
 if mouse_x<120 {
     if mouse_y>room_height-60 {
         window_set_cursor(cr_handpoint)
-        if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio-player','')
+        if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio','')
     } else if mouse_y>0 and mouse_x>0 {
         window_set_cursor(cr_default)
         select=clamp(floor(mouse_y/30),0,sett-1)
