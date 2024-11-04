@@ -77,7 +77,7 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-ks='volume.bmp'
+ks='posbar.bmp'
 if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
 s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
@@ -93,7 +93,7 @@ sprite_save_strip(myspr,outf+'slider.png')
 sprite_delete(myspr)
 sprite_delete(s)
 
-ks='volume.bmp'
+ks='monoster.bmp'
 if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
 s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
@@ -109,7 +109,7 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-ks='volume.bmp'
+ks='main.bmp'
 if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
 s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 sprite_save(s,0,outf+'back.png')
@@ -124,7 +124,7 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-ks='volume.bmp'
+ks='titlebar.bmp'
 if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
 s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
@@ -157,7 +157,7 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-ks='volume.bmp'
+ks='shufrep.bmp'
 if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
 s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
