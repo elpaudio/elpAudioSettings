@@ -19,12 +19,15 @@ if !file_exists(inf) {show_message(errstr+'No WA2 skin found! File does not exis
 // now convert
 var tempf;tempf=temp_directory+'\'+ff
 
-execute_program_silent(zipzip+' x '+inf+' -o"'+tempf+'"')
+execute_program_silent(zipzip+' e "'+inf+'" -o"'+tempf+'"')
 if !directory_exists(tempf) {show_message(errstr+'Cannot make directory!') exit}
 if !file_exists(tempf+'\cbuttons.bmp') tempf+='\'+ff
 execute_program_silent('robocopy "'+workdir+'themes\winamp_default" "'+outf+'" /E /R:0 /W:0 ')
 outf+='\'
-var fs,s;s=sprite_add(tempf+'\cbuttons.bmp',0,0,0,0,0)
+var ks;
+ks='cbuttons.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+var fs,s;s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
@@ -57,7 +60,9 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\volume.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
@@ -72,7 +77,9 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\posbar.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
@@ -86,7 +93,9 @@ sprite_save_strip(myspr,outf+'slider.png')
 sprite_delete(myspr)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\monoster.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
@@ -100,7 +109,9 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\main.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 sprite_save(s,0,outf+'back.png')
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
@@ -113,7 +124,9 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\titlebar.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
@@ -144,7 +157,9 @@ sprite_delete(myspr)
 surface_free(fs)
 sprite_delete(s)
 
-s=sprite_add(tempf+'\shufrep.bmp',0,0,0,0,0)
+ks='volume.bmp'
+if !file_exists(tempf+'\'+ks) ks=string_upper(string_copy(ks,1,1))+string_copy(ks,2,1024)
+s=sprite_add(tempf+'\'+ks,0,0,0,0,0)
 fs=surface_create(sprite_get_width(s),sprite_get_height(s))
 surface_set_target(fs)
 draw_sprite(s,0,0,0)
