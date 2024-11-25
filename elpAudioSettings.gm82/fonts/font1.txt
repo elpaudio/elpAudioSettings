@@ -1,8 +1,8 @@
-name=MS Sans Serif
+name=Source Sans Pro
 size=11
 bold=0
 italic=0
-charset=1
-aa_level=0
+charset=238
+aa_level=3
 range_start=0
 range_end=255
