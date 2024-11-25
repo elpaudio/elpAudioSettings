@@ -7,13 +7,18 @@ applies_to=self
 draw_set_font(font1)
 x=0
 y=0
-name[0]='Theme'
-name[1]='Visuals'
-name[2]='Advanced'
-name[3]='Caption'
-name[4]="Plugins"
-name[5]='Save & Exit'
-sett=6
+name[0,0]='Theme'
+name[0,1]="Plugins"
+name[0,2]='Save & Exit'
+name[0,3]='Next page'
+sett[0]=4
+
+name[1,0]='Visuals'
+name[1,1]='Advanced'
+name[1,2]='Caption'
+name[1,3]='About...'
+name[1,4]='Prev. page'
+sett[1]=5
 
 ptext[0]='General'
 ptext[1]='Switching 1'
@@ -23,11 +28,7 @@ chosen[1]=0
 chosen[2]=0
 
 level=0
-
-setname[0,0]='Set theme...'
-setname[0,1]='Set theme colors...'
-setname[0,2]='testtesttesttesttestetseteasseestsetsetsetsetsetsetslbalahbalhblahblahlbhalbhalbhlahblahbla'
-setnames[0]=3
+clevel=0
 
 select=0
 curwindow=0
@@ -49,6 +50,11 @@ CAPTION_HELP='Caption string help:
                 %try - track year
                 %trn - track number
                 \# - new line'
+
+
+
+aboutstr="elpAUDIO v"+elpaudio_get_version()+"##by elpoep 2018-2024#BSD 3-Clause License#####Thanks to:##►catpawz◄#►DoneD◄#►Fukumeru◄#►ruby53◄#►Olav '8bitbubsy' Sörensen◄#►WinAMP◄#►AmigaAMP◄#►renex and floogle◄#►GM82 community◄#►Every other elpAUDIO testers◄#►Moving Shadow label◄###►...and YOU!◄◄"
+abouty=room_height/2+10
 
 workdir=pd+'\'
 if !file_exists(workdir+'elpAudio.exe') workdir=directory_previous(pd)+'\'
@@ -75,20 +81,24 @@ draw_rectangle_color(120,-1,240,241,c_white,c_black,c_black,c_white,0)
 draw_rectangle_color(120,-1,480,120,c_white,c_white,c_black,c_black,0)
 draw_set_blend_mode(bm_normal)
 
+if clevel==1 and curwindow==3 abouty-=0.35
+
+if abouty<-500 or !(clevel==1 and curwindow==3) abouty=room_height/2+10
+
 if mouse_x<120 {
     if mouse_y>room_height-60 {
         window_set_cursor(cr_handpoint)
         if mouse_check_button_released(mb_any) execute_shell('https://elpoeprod.github.io/elpAudio','')
     } else if mouse_y>0 and mouse_x>0 {
         window_set_cursor(cr_default)
-        select=clamp(floor(mouse_y/30),0,sett-1)
+        select=clamp(floor(mouse_y/30),0,sett[clevel]-1)
     }
 } else
     window_set_cursor(cr_default)
 
 i=0
 draw_rectangle(-1,-1,120,240,0)
-repeat(sett)
+repeat(sett[clevel])
 {
     if select=i
     {
@@ -105,7 +115,7 @@ repeat(sett)
         draw_rectangle_color(60,select*30,120,select*30+30,draw_get_color(),c_white,c_white,draw_get_color(),0)
 }
     draw_set_color(c_black)
-    draw_text(5,5+i*30,name[i])
+    draw_text(5,5+i*30,name[clevel,i])
     i+=1
 }
 
@@ -119,165 +129,186 @@ draw_rectangle(-1,-1,120,select*30,1)
 
 draw_set_color(c_black)
 
-if curwindow==0 {
-    draw_text(160,10,"THEME OPTIONS")
-    draw_text_ext(140,30,'Current theme:#'+mytheme+"#"+curtheme,14,room_width-120)
+if clevel=0 {
 
-    if button_draw(130,100,128,24,-1,0,'Change theme...') {
-        file=get_open_filename('Theme files|*.ini|Winamp2 skin file|*.wsz;*.zip','theme.ini')
+    if curwindow==0 {
+        draw_text(160,10,"THEME OPTIONS")
+        draw_text_ext(140,30,'Current theme:#'+mytheme+"#"+curtheme,14,room_width-120)
 
-        if file!='' then {
-                if filename_ext(file)=='.ini' curtheme=file;
-                else {WAConvert(file) curtheme='themes\'+filename_remove_ext(filename_name(file))+'\theme.ini'}
-            }
-    }
+        if button_draw(130,100,128,24,-1,0,'Change theme...') {
+            file=get_open_filename('Theme files|*.ini|Winamp2 skin file|*.wsz;*.zip','theme.ini')
 
-    if button_draw(130,148,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
-        old_themes=!old_themes
-
-    if button_draw(130,176,270,24,-1,0,'Load migrated playlist after conversion: '+get_enabled(load_migrated))
-        load_migrated=!load_migrated
-
-}
-
-if curwindow==1 {
-    draw_text(160,10,'PLAYER SETTINGS')
-    draw_text_ext(140,30,'You can change floating text speed and etc.',14,370)
-    draw_text(140,50,'Current speed: '+string(textspd))
-
-    if button_draw(130,75,128,24,-1,0,'Change text speed') {
-        textspd=get_integer('Set text speed (more than 0)',25)
-        if textspd=0 textspd=25
-    }
-
-    draw_set_color(c_ltgray)
-    draw_rectangle(160,120,200,152,0)
-    draw_set_color(c_black)
-    draw_text(162,124,string(visfreq))
-
-    myx=260
-    myw=200
-    did=myw/visfreq
-    hh=0
-    if visfreq<512 repeat(visfreq) {
-        draw_rectangle(myx+hh*did,130-abs(lengthdir_x(20,current_time*0.1+hh*4)),myx+hh*did+did,130,0)
-        hh+=1
-    } else draw_text(myx,130,'Laggy 0_0')
-    if button_draw(130,155,128,38,-1,-1,'Change audio buf. size #(cur. is '+string(__buffer_size)+')') __buffer_size=clamp(get_integer('Type in new audio buffer size.#256 is default, you can change it up to 16383.#Note that it will lag!',__buffer_size),1,16383)
-}
-
-if curwindow==2 {
-    draw_text(160,10,'ADVANCED SETTINGS')
-
-    if button_draw(160,40,270,20,-1,-1,'Enable fullscreen switch by pressing F4: '+get_enabled(fswitch)) then
-        fswitch=!fswitch
-
-    if button_draw(310,64,120,20,-1,0,'CHANGE FPS') then
-        myfps=min(max(get_integer('Set FPS for elpAudio. #(default is 60)',myfps),1),240) //fucking disguisting
-
-    if button_draw(160,112,180,20,-1,0,'Enable skip frames: '+get_enabled(skipframes)) then
-        skipframes=!skipframes
-
-    if skipframes if button_draw(160,136,270,20,-1,0,'Change amount of frames for skip (cur. is '+string(millisecs)+')') then
-        millisecs=min(max(get_integer('Set frames for skip (milliseconds)#Minimum is 1, maximum is 2000 (why so much?)',millisecs),1),2000)
-
-    draw_set_color(c_black)
-    draw_text(160,64,"elpAudio's FPS: "+string(myfps))
-    draw_set_color(c_black)
-
-    if button_draw(160,88,270,20,-1,-1,'Stick to window edges (Only 1 display): '+get_enabled(__stick_to_edges)) then
-        __stick_to_edges=!__stick_to_edges
-
-    if button_draw(160,160,270,20,-1,-1,'Vertical sync is turned '+get_enabled(vsync,1)) vsync=!vsync
-
-    if button_draw(160,184,270,20,-1,-1,'Recursive folders in Add File button are '+get_enabled(__recursive,1)) __recursive=!__recursive
-
-    draw_set_color(c_black)
-}
-
-if curwindow==3 {
-    draw_text(160,10,'CAPTION SETTINGS')
-    draw_line(120,50,room_width+1,50)
-
-    i=0 repeat(3) {
-        if level!=i then
-            chosen[i]=0
-        if button_draw(160+80*i,30,80,20,spr_folder,chosen[i],ptext[i]) or level=i then {
-            level=i
-            chosen[i]=1
+            if file!='' then {
+                    if filename_ext(file)=='.ini' curtheme=file;
+                    else {WAConvert(file) curtheme='themes\'+filename_remove_ext(filename_name(file))+'\theme.ini'}
+                }
         }
+
+        if button_draw(130,148,240,24,-1,0,'Enable old themes support: '+get_enabled(old_themes))
+            old_themes=!old_themes
+
+        if button_draw(130,176,270,24,-1,0,'Load migrated playlist after conversion: '+get_enabled(load_migrated))
+            load_migrated=!load_migrated
+
+    }
+
+    if curwindow==1 {
+        draw_text(160,10,"PLUGINS")
+        draw_text_ext(140,30,'Press on a plugin name to turn it off or on.',14,340)
+        var max_scrools;max_scrools=8;
+        i=0 repeat(clamp(plugins-1,0,max_scrools)) {
+        if button_draw(140,60+i*22,256,20,-1,0,plugin_name[i+plg_scrolled]+': '+get_enabled(plugin_enabled[i+plg_scrolled])) then
+            plugin_enabled[i+plg_scrolled]=!plugin_enabled[i+plg_scrolled]
         i+=1
-    }
-
-    if level=0 {
-        draw_set_color(c_black)
-        draw_text(160,60,'Your current IDLE caption is:#'+caption_idle+'#Converted: '+convert_cap(caption_idle))
-
-        if button_draw(160,108,200,20,-1,0,'CHANGE IDLE CAPTION') {
-            caption_idle=get_string(
-            'Change idle string.##Additional things:#%v - elpAudio version',
-            caption_idle
-            )
         }
-        draw_set_color(c_black)
-
-        draw_text(160,132,'Your current PLAY caption is:#'+caption_play+'#Converted: '+convert_cap(caption_play))
-        if button_draw(160,180,200,20,-1,0,'CHANGE PLAY CAPTION') then
-            caption_play=get_string(CAPTION_HELP,caption_play)
+        if mouse_wheel_down() plg_scrolled+=1
+        if mouse_wheel_up() plg_scrolled-=1
+        plg_scrolled=clamp(plg_scrolled,0,clamp(plugins-max_scrools-1,0,99999))
     }
-    if level=1 {
-        draw_set_color(c_black)
-        draw_text(160,55,'Change captions: '+get_enabled(caption_chng))
-        if button_draw(160+string_width('Change captions: FFFFFF'),55,11,11,checkspr,caption_chng) then
-            caption_chng=!caption_chng
 
-        if button_draw(160,70,256,16,-1,0,'Change caption change speed: (cur. '+string(caption_chn_spd)+'s)') then
-            caption_chn_spd=get_integer('Change caption change speed in seconds#(default is 3 seconds)',caption_chn_spd)
+    if curwindow==2 {
+        draw_text(160,10,"SAVE & EXIT")
+        draw_text_ext(140,30,'The settings and elpAudio will close for applying the changes.',14,340)
+
+        if button_draw(130,75,128,24,-1,0,'Save and exit') ending()
+    }
+    if curwindow==3 {
+    clevel=1
+    curwindow=0
+    io_clear()
+    }
+
+}
+
+if clevel=1 {
+if curwindow==0 {
+        draw_text(160,10,'PLAYER SETTINGS')
+        draw_text_ext(140,30,'You can change floating text speed and etc.',14,370)
+        draw_text(140,50,'Current speed: '+string(textspd))
+
+        if button_draw(130,75,128,24,-1,0,'Change text speed') {
+            textspd=get_integer('Set text speed (more than 0)',25)
+            if textspd=0 textspd=25
+        }
+
+        draw_set_color(c_ltgray)
+        draw_rectangle(160,120,200,152,0)
+        draw_set_color(c_black)
+        draw_text(162,124,string(visfreq))
+
+        myx=260
+        myw=200
+        did=myw/visfreq
+        hh=0
+        if visfreq<512 repeat(visfreq) {
+            draw_rectangle(myx+hh*did,130-abs(lengthdir_x(20,current_time*0.1+hh*4)),myx+hh*did+did,130,0)
+            hh+=1
+        } else draw_text(myx,130,'Laggy 0_0')
+        if button_draw(130,155,128,38,-1,-1,'Change audio buf. size #(cur. is '+string(__buffer_size)+')') __buffer_size=clamp(get_integer('Type in new audio buffer size.#256 is default, you can change it up to 16383.#Note that it will lag!',__buffer_size),1,16383)
+    }
+
+    if curwindow==1 {
+        draw_text(160,10,'ADVANCED SETTINGS')
+
+        if button_draw(160,40,270,20,-1,-1,'Enable fullscreen switch by pressing F4: '+get_enabled(fswitch)) then
+            fswitch=!fswitch
+
+        if button_draw(310,64,120,20,-1,0,'CHANGE FPS') then
+            myfps=min(max(get_integer('Set FPS for elpAudio. #(default is 60)',myfps),1),240) //fucking disguisting
+
+        if button_draw(160,112,180,20,-1,0,'Enable skip frames: '+get_enabled(skipframes)) then
+            skipframes=!skipframes
+
+        if skipframes if button_draw(160,136,270,20,-1,0,'Change amount of frames for skip (cur. is '+string(millisecs)+')') then
+            millisecs=min(max(get_integer('Set frames for skip (milliseconds)#Minimum is 1, maximum is 2000 (why so much?)',millisecs),1),2000)
 
         draw_set_color(c_black)
-        if caption_chng {
-            draw_text(160,90,'Current CHNG1 caption is:#'+caption_chn1+'#Converted: '+convert_cap(caption_chn1))
-            if button_draw(160,160,200,20,-1,-1,'CHANGE CHNG1 CAPTION') then
-                caption_chn1=get_string(CAPTION_HELP,caption_chn1)
+        draw_text(160,64,"elpAudio's FPS: "+string(myfps))
+        draw_set_color(c_black)
+
+        if button_draw(160,88,270,20,-1,-1,'Stick to window edges (Only 1 display): '+get_enabled(__stick_to_edges)) then
+            __stick_to_edges=!__stick_to_edges
+
+        if button_draw(160,160,270,20,-1,-1,'Vertical sync is turned '+get_enabled(vsync,1)) vsync=!vsync
+
+        if button_draw(160,184,270,20,-1,-1,'Recursive folders in Add File button are '+get_enabled(__recursive,1)) __recursive=!__recursive
+
+        draw_set_color(c_black)
+    }
+
+    if curwindow==2 {
+        draw_text(160,10,'CAPTION SETTINGS')
+        draw_line(120,50,room_width+1,50)
+
+        i=0 repeat(3) {
+            if level!=i then
+                chosen[i]=0
+            if button_draw(160+80*i,30,80,20,spr_folder,chosen[i],ptext[i]) or level=i then {
+                level=i
+                chosen[i]=1
+            }
+            i+=1
+        }
+
+        if level=0 {
+            draw_set_color(c_black)
+            draw_text(160,60,'Your current IDLE caption is:#'+caption_idle+'#Converted: '+convert_cap(caption_idle))
+
+            if button_draw(160,108,200,20,-1,0,'CHANGE IDLE CAPTION') {
+                caption_idle=get_string(
+                'Change idle string.##Additional things:#%v - elpAudio version',
+                caption_idle
+                )
+            }
+            draw_set_color(c_black)
+
+            draw_text(160,132,'Your current PLAY caption is:#'+caption_play+'#Converted: '+convert_cap(caption_play))
+            if button_draw(160,180,200,20,-1,0,'CHANGE PLAY CAPTION') then
+                caption_play=get_string(CAPTION_HELP,caption_play)
+        }
+        if level=1 {
+            draw_set_color(c_black)
+            draw_text(160,55,'Change captions: '+get_enabled(caption_chng))
+            if button_draw(160+string_width('Change captions: FFFFFF'),55,11,11,checkspr,caption_chng) then
+                caption_chng=!caption_chng
+
+            if button_draw(160,70,256,16,-1,0,'Change caption change speed: (cur. '+string(caption_chn_spd)+'s)') then
+                caption_chn_spd=get_integer('Change caption change speed in seconds#(default is 3 seconds)',caption_chn_spd)
+
+            draw_set_color(c_black)
+            if caption_chng {
+                draw_text(160,90,'Current CHNG1 caption is:#'+caption_chn1+'#Converted: '+convert_cap(caption_chn1))
+                if button_draw(160,160,200,20,-1,-1,'CHANGE CHNG1 CAPTION') then
+                    caption_chn1=get_string(CAPTION_HELP,caption_chn1)
+            }
+        }
+        if level=2 {
+            draw_set_color(c_black)
+            if caption_chng {
+                draw_text(160,60,'Current CHNG2 caption is:#'+caption_chn2+'#Converted: '+convert_cap(caption_chn2))
+                if button_draw(160,135,200,20,-1,-1,'CHANGE CHNG2 CAPTION') then
+                    caption_chn2=get_string(CAPTION_HELP,caption_chn2)
+            } else draw_text(160,60,'Enable caption change at first!')
         }
     }
-    if level=2 {
-        draw_set_color(c_black)
-        if caption_chng {
-            draw_text(160,60,'Current CHNG2 caption is:#'+caption_chn2+'#Converted: '+convert_cap(caption_chn2))
-            if button_draw(160,135,200,20,-1,-1,'CHANGE CHNG2 CAPTION') then
-                caption_chn2=get_string(CAPTION_HELP,caption_chn2)
-        } else draw_text(160,60,'Enable caption change at first!')
+    if curwindow==3 {
+    draw_set_halign(fa_center)
+    draw_text(300,floor(room_height/2+abouty),aboutstr)
+
+    draw_set_halign(fa_left)
+    }
+    if curwindow==4{
+    clevel=0
+    curwindow=0
+    io_clear()
     }
 }
 
-if curwindow==4 {
-    draw_text(160,10,"PLUGINS")
-    draw_text_ext(140,30,'Press on a plugin name to turn it off or on.',14,340)
-    var max_scrools;max_scrools=8;
-    i=0 repeat(clamp(plugins-1,0,max_scrools)) {
-    if button_draw(140,60+i*22,256,20,-1,0,plugin_name[i+plg_scrolled]+': '+get_enabled(plugin_enabled[i+plg_scrolled])) then
-        plugin_enabled[i+plg_scrolled]=!plugin_enabled[i+plg_scrolled]
-    i+=1
-    }
-    if mouse_wheel_down() plg_scrolled+=1
-    if mouse_wheel_up() plg_scrolled-=1
-    plg_scrolled=clamp(plg_scrolled,0,clamp(plugins-max_scrools-1,0,99999))
-}
-
-if curwindow==5 {
-    draw_text(160,10,"SAVE & EXIT")
-    draw_text_ext(140,30,'The settings and elpAudio will close for applying the changes.',14,340)
-
-    if button_draw(130,75,128,24,-1,0,'Save and exit') ending()
-}
-
-draw_reset()
+draw_set1(c_white,1)
 #define KeyPress_112
 /*"/*'/**//* YYD ACTION
 lib_id=1
 action_id=603
 applies_to=self
 */
-show_message("elpAUDIO v"+elpaudio_get_version()+"##by elpoep 2018-2024#BSD-3 License")
-show_message("Thanks to:#♦corakit♦#♦catpawz♦#♦DoneD♦#♦Fukumeru♦#♦ruby53♦#♦Olav '8bitbubsy' Sörensen♦#♦WinAMP♦#♦AmigaAMP♦#♦renex and floogle♦#♦GM82 community♦#♦Every other elpAUDIO testers♦#♦Moving Shadow label♦#♦♦...and YOU!♦♦")
+show_message("")
