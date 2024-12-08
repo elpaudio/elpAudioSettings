@@ -48,6 +48,7 @@ millisecs=ini_read_real('','FramesForSkip',1)
 vsync=ini_read_real('','VerticalSync',0)
 __recursive=ini_read_real('','RecursiveFolders',0)
 __buffer_size=ini_read_real('','AudioBufferSize',256)
+__skipfilecheck=ini_read_real('','SkipFileDriveCheck',1)
 
 ini_close()
 }

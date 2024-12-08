@@ -229,9 +229,11 @@ if curwindow==0 {
         if button_draw(160,88,270,20,-1,-1,'Stick to window edges (Only 1 display): '+get_enabled(__stick_to_edges)) then
             __stick_to_edges=!__stick_to_edges
 
-        if button_draw(160,160,270,20,-1,-1,'Vertical sync is turned '+get_enabled(vsync,1)) vsync=!vsync
+        if button_draw(160,112,270,20,-1,-1,'Vertical sync is turned '+get_enabled(vsync,1)) vsync=!vsync
 
-        if button_draw(160,184,270,20,-1,-1,'Recursive folders in Add File button are '+get_enabled(__recursive,1)) __recursive=!__recursive
+        if button_draw(160,136,270,20,-1,-1,'Recursive folders in Add File button are '+get_enabled(__recursive,1)) __recursive=!__recursive
+
+        if button_draw(160,160,270,20,-1,-1,'Do not check for file on drives: '+get_enabled(__skipfilecheck,1)) __skipfilecheck=!__skipfilecheck
 
         draw_set_color(c_black)
     }

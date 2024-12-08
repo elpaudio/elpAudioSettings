@@ -18,6 +18,7 @@ ini_open(workdir+'settings.ini')
     ini_write_real('','VerticalSync',vsync)
     ini_write_real('','RecursiveFolders',__recursive)
     ini_write_real('','AudioBufferSize',__buffer_size)
+    ini_write_real('','SkipFileDriveCheck',__skipfilecheck)
 ini_close()
 
 ini_open(workdir+'plugins\active.ini')
